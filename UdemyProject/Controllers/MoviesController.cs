@@ -4,21 +4,36 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using UdemyProject.Models;
+using UdemyProject.ViewModels;
 
 namespace UdemyProject.Controllers
 {
     public class MoviesController : Controller
     {
         // GET: Movie
+
+        [Route("movies/released/{year}/{month:regex(\\d{2}):range(1,12)}")]
+
         public ActionResult Random()
         {
             var movie = new Movie() { Name = "Shrek!" };
-            return View(movie);
-            //return Content("Hello world!");
-            //return HttpNotFound();
-            //return new EmptyResult();
-            //return RedirectToAction("Index","Home", new { page = 1, sortBy = "name"});
-        }
+
+            var viewResult = new ViewResult();
+            var customers = new List<Customer>
+            {
+                new Customer { Name = "Customer 1"},
+                new Customer { Name = "Customer 2"}
+            };
+
+            var viewModel = new RandomMovieViewModel
+            {
+                Movie = movie,
+                Customers = customers
+            };
+
+            return View(viewModel);
+             
+        } 
         public ActionResult ByReleaseDate(int year, int month)
         {
             return Content(year + "/" + month);
